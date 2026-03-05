@@ -19,6 +19,8 @@ sealed class AlesisDrumKit(val midiNote: Int, val name: String) {
     object Tom3Center : AlesisDrumKit(43, "Tom 3 Center")
     object Tom3Rim : AlesisDrumKit(58, "Tom 3 Rim")
 
+    object Tom4Center : AlesisDrumKit(41, "Tom 4 Center")
+
     object Kick : AlesisDrumKit(36, "Kick Drum")
 
     // Cymbals
@@ -31,7 +33,7 @@ sealed class AlesisDrumKit(val midiNote: Int, val name: String) {
     object Crash1Edge : AlesisDrumKit(55, "Crash 1 Edge")
 
     object Crash2Center : AlesisDrumKit(57, "Crash 2")
-    object Crash2Edge : AlesisDrumKit(52, "Crash 2 Edge")
+    object China : AlesisDrumKit(52, "Crash 2 Edge")
 
     object RideCenter : AlesisDrumKit(51, "Ride Bow")
     object RideBell : AlesisDrumKit(53, "Ride Bell")
@@ -55,10 +57,11 @@ sealed class AlesisDrumKit(val midiNote: Int, val name: String) {
                 47 -> Tom2Rim.name
                 43 -> Tom3Center.name
                 58 -> Tom3Rim.name
+                41 -> Tom4Center.name
                 49 -> Crash1Center.name
                 55 -> Crash1Edge.name
                 57 -> Crash2Center.name
-                52 -> Crash2Edge.name
+                52 -> China.name
                 51 -> RideCenter.name
                 53 -> RideBell.name
                 59 -> RideEdge.name
