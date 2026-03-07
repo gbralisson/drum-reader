@@ -190,6 +190,7 @@ fun ConnectionScreen(
     val midiMessages by drumViewModel.midiMessages.collectAsState()
     val currentMeasure by drumViewModel.currentMeasure.collectAsState()
     val isPlaying by drumViewModel.isPlaying.collectAsState()
+    val isSynced by drumViewModel.isSynced.collectAsState()
 
     ConnectionScreenContent(
         connectionStatus = connectionStatus,
@@ -198,6 +199,7 @@ fun ConnectionScreen(
         staffNotes = initialStaffNotes,
         currentMeasure = currentMeasure,
         isPlaying = isPlaying,
+        isSynced = isSynced,
         onConnect = { deviceName -> connectionViewModel.connect(deviceName) },
         onTogglePlayback = { drumViewModel.togglePlayback() },
         onResetPlayback = { drumViewModel.resetPlayback() },
@@ -213,6 +215,7 @@ fun ConnectionScreenContent(
     staffNotes: List<StaffNote>,
     currentMeasure: Float?,
     isPlaying: Boolean,
+    isSynced: Boolean,
     onConnect: (String) -> Unit,
     onTogglePlayback: () -> Unit,
     onResetPlayback: () -> Unit,
@@ -270,6 +273,7 @@ fun ConnectionScreenContent(
                 notes = staffNotes,
                 measuresPerLine = 2,
                 currentMeasure = currentMeasure,
+                isSynced = isSynced,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)
@@ -327,6 +331,7 @@ fun ConnectionScreenPreview() {
             ),
             currentMeasure = 0.5f,
             isPlaying = false,
+            isSynced = false,
             onConnect = {},
             onTogglePlayback = {},
             onResetPlayback = {}

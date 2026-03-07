@@ -1,5 +1,7 @@
 package com.example.drumreader.model
 
+import com.example.drumreader.ui.components.StaffNote
+
 /**
  * Alesis Drum Kit MIDI mapping configuration.
  * This class provides standard MIDI note mappings for Alesis electronic drum kits
@@ -71,3 +73,15 @@ sealed class AlesisDrumKit(val midiNote: Int, val name: String) {
         }
     }
 }
+
+data class DrumHit(
+    val component: String,
+    val velocity: Int,
+    val timestamp: Long
+)
+
+data class PlaybackNote(
+    val note: StaffNote,
+    val expectedTimeMillis: Long,
+    var wasHit: Boolean = false
+)

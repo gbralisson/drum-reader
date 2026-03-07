@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.example.drumreader.model.AlesisDrumKit
+import com.example.drumreader.model.DrumHit
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -26,6 +27,12 @@ class MidiConnectionManager(context: Context) {
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val midiMessages: SharedFlow<String> = _midiMessages.asSharedFlow()
+
+    private val _drumHits = MutableSharedFlow<DrumHit>(
+        extraBufferCapacity = 64,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val drumHits: SharedFlow<DrumHit> = _drumHits.asSharedFlow()
 
     // Flow for connectivity debug messages
     private val _debugMessages = MutableSharedFlow<String>(
@@ -119,8 +126,10 @@ class MidiConnectionManager(context: Context) {
         // Note On message usually starts with 0x90 (144)
         if (status in 144..159 && velocity > 0) {
             val drumComponent = AlesisDrumKit.fromMidiNote(note)
+            val currentTime = System.currentTimeMillis()
             val message = "Hit: $drumComponent (Vel: $velocity)"
             _midiMessages.tryEmit(message)
+            _drumHits.tryEmit(DrumHit(drumComponent, velocity, currentTime))
         }
     }
 }

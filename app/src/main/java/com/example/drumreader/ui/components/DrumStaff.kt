@@ -1,8 +1,10 @@
 package com.example.drumreader.ui.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +27,7 @@ fun DrumStaff(
     notes: List<StaffNote>,
     measuresPerLine: Int = 2,
     currentMeasure: Float? = null,
+    isSynced: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     if (notes.isEmpty()) return
@@ -40,6 +43,7 @@ fun DrumStaff(
                 lineOffset = i * measuresPerLine.toFloat(),
                 measuresPerLine = measuresPerLine,
                 currentMeasure = currentMeasure,
+                isSynced = isSynced,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
@@ -57,15 +61,40 @@ fun StaffLine(
     lineOffset: Float,
     measuresPerLine: Int,
     currentMeasure: Float? = null,
+    isSynced: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    Canvas(
+    Box(
         modifier = modifier
             .padding(horizontal = 8.dp)
     ) {
+        StaffBackground(
+            notes = notes,
+            lineOffset = lineOffset,
+            measuresPerLine = measuresPerLine,
+            modifier = Modifier.fillMaxSize()
+        )
+        TrackerOverlay(
+            currentMeasure = currentMeasure,
+            lineOffset = lineOffset,
+            measuresPerLine = measuresPerLine,
+            isSynced = isSynced,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+@Composable
+fun StaffBackground(
+    notes: List<StaffNote>,
+    lineOffset: Float,
+    measuresPerLine: Int,
+    modifier: Modifier = Modifier
+) {
+    Canvas(modifier = modifier) {
         val width = size.width
         val height = size.height
-        val spacing = height / 10f 
+        val spacing = height / 10f
         val middleY = height / 2f
         val lineSpacing = spacing * 2
 
@@ -119,11 +148,11 @@ fun StaffLine(
                 radius = spacing * 0.8f,
                 center = Offset(noteX, noteY)
             )
-            
+
             val stemHeight = spacing * 6
             val isUp = staffIndex < 4
             val stemEnd = if (isUp) noteY - stemHeight else noteY + stemHeight
-            
+
             drawLine(
                 color = Color.Black,
                 start = Offset(noteX + spacing * 0.8f, noteY),
@@ -131,14 +160,30 @@ fun StaffLine(
                 strokeWidth = 1.dp.toPx()
             )
         }
+    }
+}
 
-        // Draw tracker line
+@Composable
+fun TrackerOverlay(
+    currentMeasure: Float?,
+    lineOffset: Float,
+    measuresPerLine: Int,
+    isSynced: Boolean = false,
+    modifier: Modifier = Modifier
+) {
+    Canvas(modifier = modifier) {
+        val width = size.width
+        val height = size.height
+        val spacing = height / 10f
+        val middleY = height / 2f
+        val lineSpacing = spacing * 2
+
         currentMeasure?.let { measure ->
             if (measure >= lineOffset && measure < lineOffset + measuresPerLine) {
                 val relativeX = (measure - lineOffset) / measuresPerLine
                 val trackerX = relativeX * width
                 drawLine(
-                    color = Color.Red,
+                    color = if (isSynced) Color.Green else Color.Red,
                     start = Offset(trackerX, middleY - 3 * lineSpacing),
                     end = Offset(trackerX, middleY + 3 * lineSpacing),
                     strokeWidth = 2.dp.toPx()

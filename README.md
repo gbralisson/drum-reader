@@ -5,7 +5,8 @@
 ## Key Features
 *   **Real-time MIDI Connectivity:** Seamlessly scans and connects to electronic drum kits via the Android MIDI API.
 *   **Drum Hit Processing:** Intelligently parses MIDI Note On messages to identify specific kit components (Kick, Snare, Toms, etc.) along with their strike velocity.
-*   **Dynamic Playback Tracker:** A vertical red visual indicator that moves across the drum staff in real-time, synchronized with song playback based on a configurable BPM.
+*   **Dynamic Playback Tracker:** A reactive visual indicator that moves across the drum staff in real-time. It dynamically changes color from **red to green** when a hit is correctly synchronized with the notation, providing immediate performance feedback.
+*   **Intelligent Sync Engine:** Timing logic that verifies hits against expected note positions. It supports **chord synchronization**, requiring all simultaneous notes (e.g., Kick and Hi-Hat) to be played within a precise window for a successful sync.
 *   **Synchronized Audio Engine:** Integrated `SoundPool` playback that triggers drum samples (or synthesized beeps as fallback) exactly when the tracker crosses note positions.
 *   **MusicXML to JSON Conversion:** Includes a high-performance conversion utility powered by **Jackson** and **Aalto XML**, capable of transforming standard MusicXML notation into structured JSON data.
 *   **Modern Android Architecture:** Built using **Jetpack Compose** for a reactive UI and following **MVVM** and **Repository** patterns.
